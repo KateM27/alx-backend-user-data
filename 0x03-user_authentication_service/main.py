@@ -8,7 +8,8 @@ import requests
 def register_user(email: str, password: str) -> None:
     """Register new users
     """
-    r = requests.post("http://127.0.0.1:5000/users", data={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/users",
+                      data={"email": email, "password": password})
     if r.status_code == 200:
         assert (r.json() == {"email": email, "message": "user created"})
     else:
@@ -19,14 +20,16 @@ def register_user(email: str, password: str) -> None:
 def log_in_wrong_password(email: str, password: str) -> None:
     """Check if login details are valid
     """
-    r = requests.post("http://127.0.0.1:5000/sessions", data={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/sessions",
+                      data={"email": email, "password": password})
     assert (r.status_code == 401)
 
 
 def log_in(email: str, password: str) -> str:
     """Login the user with the right details
     """
-    r = requests.post("http://127.0.0.1:5000/sessions", data={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/sessions",
+                      data={"email": email, "password": password})
     assert (r.status_code == 200)
     assert (r.json() == {"email": email, "message": "logged in"})
     return r.cookies["session_id"]
@@ -62,7 +65,8 @@ def log_out(session_id: str) -> None:
 def reset_password_token(email: str) -> str:
     """Reset a password token with a given user email
     """
-    r = requests.post("http://127.0.0.1:5000/reset_password", data={"email": email})
+    r = requests.post("http://127.0.0.1:5000/reset_password",
+                      data={"email": email})
     if r.status_code == 200:
         return r.json()["reset_token"]
     assert (r.status_code == 403)
