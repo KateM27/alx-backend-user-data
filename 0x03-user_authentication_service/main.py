@@ -19,7 +19,7 @@ def register_user(email: str, password: str) -> None:
 def log_in_wrong_password(email: str, password: str) -> None:
     """Check if login details are valid
     """
-    r = requests.post("/sessions", data={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/sessions", data={"email": email, "password": password})
     assert (r.status_code == 401)
 
 
@@ -52,7 +52,7 @@ def log_out(session_id: str) -> None:
     """Log out a user
     """
     cookies = {"session_id": session_id}
-    r = requests.delete("/sessions", cookies=cookies)
+    r = requests.delete("http://127.0.0.1:5000/sessions", cookies=cookies)
     if r.status_code == 302:
         assert (r.url == "http://127/0.0.0:5000/")
     else:
