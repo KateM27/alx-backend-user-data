@@ -8,7 +8,7 @@ import requests
 def register_user(email: str, password: str) -> None:
     """Register new users
     """
-    r = requests.post("/users", info={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/users", info={"email": email, "password": password})
     if r.status_code == 200:
         assert (r.json() == {"email": email, "message": "user created"})
     else:
@@ -26,7 +26,7 @@ def log_in_wrong_password(email: str, password: str) -> None:
 def log_in(email: str, password: str) -> str:
     """Login the user with the right details
     """
-    r = requests.post("/sessions", info={"email": email, "password": password})
+    r = requests.post("http://127.0.0.1:5000/sessions", info={"email": email, "password": password})
     assert (r.status_code == 200)
     assert (r.json() == {"email": email, "message": "logged in"})
     return r.cookies["session_id"]
@@ -36,7 +36,7 @@ def profile_unlogged() -> None:
     """Check an unlogged user profile
     """
     cookies = {"session_id": session_id}
-    r = requests.get("/profile", cookies=cookies)
+    r = requests.get("http://127.0.0.1:5000/profile", cookies=cookies)
     assert (r.status_code == 200)
 
 
@@ -44,7 +44,7 @@ def profile_logged(session_id: str) -> None:
     """Check a logged in user
     """
     cookies = {"session_id": session_id}
-    r = requests.get("/profile", cookies=cookies)
+    r = requests.get("http://127.0.0.1:5000/profile", cookies=cookies)
     assert (r.status_code == 200)
 
 
@@ -62,7 +62,7 @@ def log_out(session_id: str) -> None:
 def reset_password_token(email: str) -> str:
     """Reset a password token with a given user email
     """
-    r = requests.post("/reset_password", info={"email": email})
+    r = requests.post("http://127.0.0.1:5000/reset_password", info={"email": email})
     if r.status_code == 200:
         return r.json()["reset_token"]
     assert (r.status_code == 403)
@@ -71,7 +71,7 @@ def reset_password_token(email: str) -> str:
 def update_password(email: str, reset_token: str, new_password: str) -> None:
     """Update the changed password
     """
-    r = requests.put("/reset_password",
+    r = requests.put("http://127.0.0.1:5000/reset_password",
                      info={"email": email,
                            "reset_token": reset_token,
                            "new_password": new_password})
